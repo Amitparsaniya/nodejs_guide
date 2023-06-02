@@ -1,0 +1,62 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{pageTitle}
+        link(rel="stylesheet", href="/css/main.css")
+        link(rel="stylesheet", href="/css/form.css")
+        link(rel="stylesheet", href="/css/product.css")
+        
+
+    body
+        header.main-header
+            ul.main-header__item-list
+                 li.main-header__item
+                    a.main-header__item(href="/") Shop
+                 li.main-header__item
+                    a.main-header__item(href="/product") Product
+                 if(isAuthenticated)
+                    li.main-header__item
+                        a.main-header__item(href="/add-product") Add Product
+                    li.main-header__item
+                        a.main-header__item(href="Admin-Product") Admin Product  
+                 li.main-header__item
+                    a.main-header__item(href="order") Order
+                 li.main-header__item
+                    a.main-header__item(href="cart") Cart
+            ul.main-header__item-list
+                if(!isAuthenticated)
+                    li.main-header__item
+                      a.main-header__item(href="/login") login
+                else 
+                  li.main-header__item
+                    input(type="hidden" name= "_csrf" value='csrfToken')
+                    form(action="/logout", method="post")
+                      button(type="submit") LogOut
+        main
+            if(errorMessage)
+              div.user-message.user-message--error    #{errorMessage}
+            .grid
+                form.product-form(action=`/admin/${editing ? "edit-product" : "add-product"}`,method="post",enctype='multipart/form-data')
+                    .form-control
+                      label(for="title") Title  
+                      input(type="text" name="title",value=(editing || hasError? product.title:"" ))#title
+                    //- .form-control
+                      label(for="imageUrl") Image Url 
+                      input(type="text" name="imageUrl",value=(editing || hasError? product.imageurl:"" ) )#imageurl
+                    .form-control
+                      label(for="image") Image 
+                      input(type="file" name="image")
+                    .form-control
+                      label(for="price") Price  
+                      input(type="number" name="price" step="0.01",value=(editing || hasError? product.price:"" ))#price
+                    .form-control
+                      label(for="description") Description
+                      textarea#description(name="description" rows="5" ) #{editing || hasError ? product.description : null}
+                    if(editing)
+                        input(type="hidden" name= "_csrf" value='csrfToken')
+                        input(type="hidden" ,value=(product._id) ,name="productId")
+                    button.btn(type="submit")= editing ? "Update Product" : "Add Product"
+                                                

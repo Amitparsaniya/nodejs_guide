@@ -1,0 +1,10 @@
+ section.section
+    if(currentPage != 1 && previousPage !==1)
+        a.btn(href="/?page=1") 1
+    if(hasPreviousPage)
+        a.btn(href=`/?page=${previousPage}`) #{previousPage}
+    a.btn(href=`/?page=${currentPage}`) #{currentPage}
+    if(hasNextPAge)
+        a.btn(href=`/?page=${nextPage}`) #{nextPage}
+    if(lastpage !== currentPage && nextPage !== lastpage)
+        a.btn(href=`/?page=${lastpage}`) #{lastpage}

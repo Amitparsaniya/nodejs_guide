@@ -1,0 +1,58 @@
+doctype html
+html(lang="en")
+      head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{pageTitle}
+        link(rel="stylesheet", href="./css/main.css")
+        link(rel="stylesheet", href="./css/form.css")
+        link(rel="stylesheet", href="./css/product.css")
+        
+      body 
+         header.main-header
+            nav.main-header__nav 
+               ul.main-header__item-list
+                 li.main-header__item
+                    a.main-header__item(href="/") Shop
+                 li.main-header__item
+                    a.main-header__item(href="/product") Product
+                 if(isAuthenticated)
+                    li.main-header__item
+                        a.main-header__item(href="/add-product") Add Product
+                    li.main-header__item
+                        a.main-header__item(href="Admin-Product") Admin Product  
+                 li.main-header__item
+                    a.main-header__item(href="order") Order
+                 li.main-header__item
+                    a.main-header__item(href="cart") Cart
+               ul.main-header__item-list
+                  if(!isAuthenticated)
+                        li.main-header__item
+                            a.main-header__item(href="/login") login
+                  else 
+                     li.main-header__item
+                        form(action="/logout", method="post")
+                           button(type="submit") LogOut
+         main  
+            if prods.length > 0
+                        .grid
+                           each product in prods
+                              article.card.product-Item 
+                                 h1.product__title #{product.productid.title}
+                                 h2.product__title Quantity : #{product.quantity}
+                                 .card__actions
+                                    form(action="/cart-delete-item", method="post")
+                                       input(type="hidden" name= "productId" value=`${product.productid._id}`)
+                                       button.btndelete(type="submit") Delete Product
+                        hr
+                        div.centerd
+                           //-  form(action="/create-order" ,method='post')
+                              input(type="hidden" name= "_csrf" value='csrfToken')
+                              button.btn(type="submit") Order Now 
+                           a.btn(href="/checkout") Order Now
+ 
+                             
+            else 
+               h1 No products in Cart!  
+            

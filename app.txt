@@ -1,0 +1,81 @@
+---This code use full for sqldatabse
+
+const sql= require("./utils/database")
+
+
+
+
+const User = require("./models/user")
+const Product =require("./models/product")
+const Cart =require("./models/cart")
+const cartItem =require("./models/cart-item")
+const Order= require("./models/order")
+const orderItem =require("./models/order-item")
+
+
+
+
+Product.belongsTo(User,{constrainsts:true,OnDelete:'CASCADE'})
+User.hasMany(Product)
+
+User.hasOne(Cart)
+Cart.belongsTo(User)
+
+Cart.belongsToMany(Product ,{through: cartItem})
+Product.belongsToMany(Cart,{through: cartItem})
+
+Order.belongsTo(User)
+
+User.hasMany(Order)
+
+Order.belongsToMany(Product,{ through:orderItem})
+Product.belongsToMany(Order,{ through:orderItem})
+
+
+// sql.sync({force:true}) will overwrite table everytime and data will be gone everytime 
+// sql.sync({force:true})
+sql.sync()
+.then(result=>
+    {
+        // console.log("db conected sucessfully!")
+        return User.findByPk(1)
+    })
+.then(user=>{
+    if(!user){
+        return User.create({ name: 'dummyuser', email: 'dummy@test.test'})
+    }
+    return user
+}).then((user)=>{
+    return user.createCart()
+})
+.catch(e=>console.log(e))
+
+
+
+for pug
+
+               //-  li.main-header__item
+                //-     a.main-header__item(href="/add-product") Add Product
+                //-  li.main-header__item
+                //-     a.main-header__item(href="Admin-Product") Admin Product  
+
+
+
+// exports.addNewTask = async (req, res) => {
+// try {
+//    const { newTask } = req.body
+
+//    const userdata = await user.findById(req.user._id)
+
+//    const tododata = await userTodo.findOne({ owner: req.user._id })
+//    console.log(/data/, tododata);
+
+//    tododata.task.push({
+//       Todotask: newTask
+//    })
+//    await tododata.save()
+//    res.json(200).json({ message: "your new task is added!" })
+// } catch (e) {
+//    console.log(e);
+// }
+// }

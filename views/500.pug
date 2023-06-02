@@ -1,0 +1,41 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{pageTitle}
+        link(rel="stylesheet", href="/css/main.css")
+        link(rel="stylesheet", href="/css/form.css")
+        link(rel="stylesheet", href="/css/product.css")
+
+    body
+        header.main-header
+           nav.main-header__nav 
+                ul.main-header__item-list
+                 li.main-header__item
+                    a.main-header__item(href="/") Shop
+                 li.main-header__item
+                    a.main-header__item(href="/product") Product
+                 if(isAuthenticated)
+                    li.main-header__item
+                        a.main-header__item(href="/add-product") Add Product
+                    li.main-header__item
+                        a.main-header__item(href="Admin-Product") Admin Product  
+                    li.main-header__item
+                        a.main-header__item(href="order") Order
+                    li.main-header__item
+                        a.main-header__item(href="cart") Cart
+                ul.main-header__item-list
+                    if(!isAuthenticated)
+                        li.main-header__item
+                            a.main-header__item(href="/login") login
+                    else 
+                        li.main-header__item
+                            form(action="/logout", method="post")
+                                button(type="submit") LogOut
+    main 
+        h1 some error occurred!!
+        p we are working on fixing this issue, sorry for inconvenience!!
+        a(href="/") Return to home page       
+        

@@ -1,0 +1,77 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{pageTitle}
+        link(rel="stylesheet", href="/css/main.css")
+        link(rel="stylesheet", href="/css/form.css")
+        link(rel="stylesheet", href="/css/product.css")
+
+
+    body 
+        header.main-header
+            nav.main-header__nav 
+                ul.main-header__item-list
+                    li.main-header__item
+                        a.main-header__item(href="/") Shop
+                    li.main-header__item
+                        a.main-header__item(href="/product") Product
+                    if(isAuthenticated)
+                        li.main-header__item
+                            a.main-header__item(href="/add-product") Add Product
+                        li.main-header__item
+                            a.main-header__item(href="Admin-Product") Admin Product  
+                        li.main-header__item
+                            a.main-header__item(href="order") Order
+                        li.main-header__item
+                            a.main-header__item(href="cart") Cart
+                ul.main-header__item-list
+                    if(!isAuthenticated)
+                        li.main-header__item
+                            a.main-header__item(href="/login") login
+                        li.main-header__item
+                            a.main-header__item(href="/signup") SignUp
+                    else 
+                        li.main-header__item
+                            form(action="/logout", method="post")
+                                button(type="submit") LogOut
+
+
+
+
+               
+        main 
+            if prods.length > 0
+                .grid
+                    each product in prods
+                        article.card.product-item
+                            header.card__header
+                                h1.product__title #{product.title}
+                            div.card__image
+                                img(src=product.imageurl, alt=product.imageurl)
+                            div.card__content
+                                h2.product__price $ #{product.price}
+                                p.product__description #{product.description}
+                            .card__actions
+                                 form(action="/cart", method="post")
+                                    input(type="hidden" name= "_csrf" value='csrfToken')
+                                    button.btn(type="submit") Add to cart
+                                    input(type="hidden" name= "productId" value=`${product._id}`)
+                section.section
+                    if(currentPage !== 1 && previousPage !==1)
+                        a.btn(href="?page=1") 1
+                    if(hasPreviousPage)
+                        a.btn(href=`?page=${previousPage}`) #{previousPage}
+                    a.btn(href=`?page=${currentPage}`) #{currentPage}
+                    if(hasNextPAge)
+                        a.btn(href=`?page=${nextPage}`) #{nextPage}
+                    if(lastpage !== currentPage && nextPage !== lastpage)
+                        a.btn(href=`?page=${lastpage}`) #{lastpage}
+            else 
+                h1 No Products plz add some product from cart!!                   
+           
+            
+        
+    
